@@ -17,6 +17,9 @@
   "icon": "assets/cobalt/icon.png",
   "environment": "*",
   "entrypoints": {
+    "preLaunch": [
+      "org.cobalt.internal.launch.PreLaunch"
+    ],
     "client": [
       {
         "adapter": "kotlin",

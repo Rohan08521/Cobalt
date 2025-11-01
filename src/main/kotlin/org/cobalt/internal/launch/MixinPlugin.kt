@@ -1,7 +1,6 @@
 package org.cobalt.internal.launch
 
 import com.llamalad7.mixinextras.MixinExtrasBootstrap
-import org.cobalt.internal.module.ModuleManager
 import org.objectweb.asm.tree.ClassNode
 import org.spongepowered.asm.mixin.extensibility.IMixinConfigPlugin
 import org.spongepowered.asm.mixin.extensibility.IMixinInfo
@@ -10,7 +9,6 @@ class MixinPlugin : IMixinConfigPlugin {
 
   override fun onLoad(mixinPackage: String?) {
     MixinExtrasBootstrap.init()
-    ModuleManager.loadModules()
   }
 
   override fun getRefMapperConfig(): String? = null
@@ -23,13 +21,15 @@ class MixinPlugin : IMixinConfigPlugin {
     p1: ClassNode?,
     p2: String?,
     p3: IMixinInfo?,
-  ) {}
+  ) {
+  }
 
   override fun postApply(
     p0: String?,
     p1: ClassNode?,
     p2: String?,
     p3: IMixinInfo?,
-  ) {}
+  ) {
+  }
 
 }
