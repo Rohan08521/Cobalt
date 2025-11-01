@@ -21,6 +21,7 @@ base {
 repositories {
   mavenCentral()
   maven("https://jitpack.io")
+  maven("https://maven.meteordev.org/releases")
   maven("https://pkgs.dev.azure.com/djtheredstoner/DevAuth/_packaging/public/maven/v1")
   maven("https://api.modrinth.com/maven")
 }
@@ -43,8 +44,8 @@ dependencies {
     include("org.lwjgl:lwjgl-nanovg:${lwjglVersion}:natives-$it")
   }
 
-  modImplementation("com.github.caoimhebyrne:KDiscordIPC:0.2.3")
-  include("com.github.caoimhebyrne:KDiscordIPC:0.2.3")
+  implementation("meteordevelopment:discord-ipc:1.1")
+  include("meteordevelopment:discord-ipc:1.1")
 }
 
 tasks {
