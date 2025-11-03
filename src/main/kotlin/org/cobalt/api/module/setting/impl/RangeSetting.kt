@@ -5,5 +5,7 @@ import org.cobalt.api.module.setting.Setting
 class RangeSetting(
   name: String,
   description: String,
-  defaultValue: Boolean
-) : Setting<Boolean>(name, description, defaultValue)
+  defaultValue: Pair<Double, Double>,
+  val min: Double,
+  val max: Double
+) : Setting<Pair<Double, Double>>(name, description, defaultValue)
