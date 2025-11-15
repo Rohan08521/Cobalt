@@ -31,4 +31,12 @@ object MainCommand : Command(
   fun unload() {
     org.cobalt.internal.loader.Loader.unload()
   }
+
+  @SubCommand
+  fun dev(subSubCommand: String) {
+      if (subSubCommand == "testreflection") {
+          org.cobalt.api.util.ChatUtils.sendDebug("cat")
+          //org.cobalt.TestArea.runReflectionTest()
+      }
+  }
 }

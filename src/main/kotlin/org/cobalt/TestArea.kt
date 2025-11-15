@@ -1,9 +1,13 @@
 package org.cobalt
 
 import org.cobalt.api.event.annotation.SubscribeEvent
+import java.lang.annotation.Retention
+import java.lang.annotation.RetentionPolicy
+import org.cobalt.api.util.ReflectionUtils
 
 object TestArea {
-    val TESTAREENABLEDTHISWILLSPAMURCHATPROB = false // change or something idk
+    val TESTAREENABLEDTHISWILLSPAMURCHATPROB = false
+
     @SubscribeEvent
     fun onClick(event: org.cobalt.api.event.impl.client.MouseEvent.LeftClick) {
         if (!TESTAREENABLEDTHISWILLSPAMURCHATPROB) return
