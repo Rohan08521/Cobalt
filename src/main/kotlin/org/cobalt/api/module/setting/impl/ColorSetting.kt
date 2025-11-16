@@ -8,8 +8,9 @@ import org.lwjgl.glfw.GLFW
 class ColorSetting(
   name: String,
   description: String,
+  subCategory: String,
   defaultValue: Int
-) : Setting<Int>(name, description, defaultValue) {
+) : Setting<Int>(name, description, subCategory, defaultValue) {
 
   override fun read(element: JsonElement) {
     this.value = element.asInt

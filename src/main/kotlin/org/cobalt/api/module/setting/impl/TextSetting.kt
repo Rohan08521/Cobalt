@@ -7,8 +7,9 @@ import org.cobalt.api.module.setting.Setting
 class TextSetting(
   name: String,
   description: String,
+  subCategory: String,
   defaultValue: String
-) : Setting<String>(name, description, defaultValue) {
+) : Setting<String>(name, description, subCategory, defaultValue) {
 
   override fun read(element: JsonElement) {
     this.value = element.asString
