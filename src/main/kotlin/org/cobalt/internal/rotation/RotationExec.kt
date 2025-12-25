@@ -2,7 +2,7 @@ package org.cobalt.internal.rotation
 
 import net.minecraft.client.network.ClientPlayerEntity
 import org.cobalt.api.util.player.MovementManager
-import org.cobalt.api.util.rotation.IRotationExec
+import org.cobalt.api.rotation.IRotationExec
 
 object RotationExec : IRotationExec {
 
