@@ -17,22 +17,24 @@ object AddonLoader {
   private val gson = Gson()
 
   private fun fillTestAddons() {
-    addons += AddonMetadata(
-      id = "test",
-      name = "Test Addon",
-      version = "1.0.0-dev",
-      entrypoints = listOf("fake"),
-      mixins = emptyList()
-    ) to object : Addon() {
+    for (index in 0..10) {
+      addons += AddonMetadata(
+        id = "test$index",
+        name = "Test Addon $index",
+        version = "1.0.0-dev",
+        entrypoints = listOf("fake"),
+        mixins = emptyList()
+      ) to object : Addon() {
 
-      override fun onLoad() {
-        println("[Cobalt] Test Addon loaded")
+        override fun onLoad() {
+          println("[Cobalt] Test Addon loaded")
+        }
+
+        override fun onUnload() {
+          println("[Cobalt] Test Addon unloaded")
+        }
+
       }
-
-      override fun onUnload() {
-        println("[Cobalt] Test Addon unloaded")
-      }
-
     }
   }
 

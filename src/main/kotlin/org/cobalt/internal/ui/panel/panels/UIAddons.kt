@@ -3,9 +3,13 @@ package org.cobalt.internal.ui.panel.panels
 import java.awt.Color
 import org.cobalt.api.util.ui.NVGRenderer
 import org.cobalt.internal.loader.AddonLoader
+import org.cobalt.internal.ui.UIComponent
 import org.cobalt.internal.ui.panel.UIPanel
 import org.cobalt.internal.ui.panel.components.UIAddonEntry
 import org.cobalt.internal.ui.panel.components.UITopbar
+import org.cobalt.internal.ui.util.UIGridLayout
+import org.cobalt.internal.ui.util.UIScrollHandler
+import org.cobalt.internal.ui.util.isHoveringOver
 
 class UIAddons : UIPanel(
   x = 0F,
@@ -16,6 +20,15 @@ class UIAddons : UIPanel(
 
   private val topBar = UITopbar("Addons")
   private val entries = AddonLoader.getAddons().map { UIAddonEntry(it.first, it.second) }
+
+  private val gridLayout = UIGridLayout(
+    columns = 3,
+    itemWidth = 270F,
+    itemHeight = 70F,
+    gap = 20F
+  )
+
+  private val scrollHandler = UIScrollHandler()
 
   init {
     components.addAll(entries)
@@ -28,13 +41,26 @@ class UIAddons : UIPanel(
       .updateBounds(x, y)
       .render()
 
+    val startY = y + topBar.height
+    val visibleHeight = height - topBar.height
 
-    var offsetX = x + 20F
-    var offsetY = y + topBar.height + 20F
+    scrollHandler.setMaxScroll(gridLayout.contentHeight(entries.size) + 20F, visibleHeight)
+    NVGRenderer.pushScissor(x, startY, width, visibleHeight)
 
-    entries[0]
-      .updateBounds(offsetX, offsetY)
-      .render()
+    val scrollOffset = scrollHandler.getOffset()
+    gridLayout.layout(x + 20F, startY + 20F - scrollOffset, entries)
+    entries.forEach(UIComponent::render)
+
+    NVGRenderer.popScissor()
+  }
+
+  override fun mouseScrolled(horizontalAmount: Double, verticalAmount: Double): Boolean {
+    if (isHoveringOver(x, y, width, height)) {
+      scrollHandler.handleScroll(verticalAmount)
+      return true
+    }
+
+    return false
   }
 
 }

@@ -82,6 +82,15 @@ object UIConfig : UIScreen() {
       super.keyPressed(input)
   }
 
+  override fun mouseScrolled(
+    mouseX: Double,
+    mouseY: Double,
+    horizontalAmount: Double,
+    verticalAmount: Double
+  ): Boolean {
+    return body.mouseScrolled(horizontalAmount, verticalAmount)|| super.mouseScrolled(mouseX, mouseY, horizontalAmount, verticalAmount)
+  }
+
   override fun init() {
     if (wasClosed) {
       openAnim.start()
