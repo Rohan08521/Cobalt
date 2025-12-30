@@ -16,32 +16,8 @@ object AddonLoader {
   private val addons = mutableListOf<Pair<AddonMetadata, Addon>>()
   private val gson = Gson()
 
-  private fun fillTestAddons() {
-    for (index in 0..10) {
-      addons += AddonMetadata(
-        id = "test$index",
-        name = "Test Addon $index",
-        version = "1.0.0-dev",
-        entrypoints = listOf("fake"),
-        mixins = emptyList()
-      ) to object : Addon() {
-
-        override fun onLoad() {
-          println("[Cobalt] Test Addon loaded")
-        }
-
-        override fun onUnload() {
-          println("[Cobalt] Test Addon unloaded")
-        }
-
-      }
-    }
-  }
-
   fun findAddons() {
     if (FabricLauncherBase.getLauncher().isDevelopment) {
-      fillTestAddons()
-
       for (entry in FabricLoader.getInstance().getEntrypointContainers("cobalt", Addon::class.java)) {
         val modMeta = entry.provider.metadata
         val metadata = AddonMetadata(
