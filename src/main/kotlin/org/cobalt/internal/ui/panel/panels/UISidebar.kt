@@ -81,7 +81,7 @@ class UISidebar : UIPanel(
         x, y, width, height,
 
         colorMask = if (hovering || selected)
-          Color(79, 140, 255, 150).rgb
+          Color(61, 94, 149).rgb
         else
           Color(120, 120, 120).rgb
       )

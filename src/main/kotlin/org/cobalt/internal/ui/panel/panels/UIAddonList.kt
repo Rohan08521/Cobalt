@@ -57,6 +57,10 @@ class UIAddonList : UIPanel(
   }
 
   override fun mouseClicked(button: Int): Boolean {
+    if (button != 1) {
+      return false
+    }
+
     for (entry in entries) {
       if (isHoveringOver(entry.x, entry.y, entry.width, entry.height)) {
         UIConfig.swapBodyPanel(UIModuleList(entry.metadata, entry.addon))
