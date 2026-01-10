@@ -1,12 +1,12 @@
 package org.cobalt.mixin.client;
 
+import java.util.stream.Collectors;
 import net.minecraft.util.crash.CrashReport;
 import org.cobalt.internal.loader.AddonLoader;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import java.util.stream.Collectors;
 
 /**
  * Superb mixin by oblongboot!

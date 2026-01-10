@@ -95,9 +95,9 @@ internal object UIConfig : UIScreen() {
     mouseX: Double,
     mouseY: Double,
     horizontalAmount: Double,
-    verticalAmount: Double
+    verticalAmount: Double,
   ): Boolean {
-    return body.mouseScrolled(horizontalAmount, verticalAmount)||
+    return body.mouseScrolled(horizontalAmount, verticalAmount) ||
       super.mouseScrolled(mouseX, mouseY, horizontalAmount, verticalAmount)
   }
 

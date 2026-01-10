@@ -11,7 +11,7 @@ enum class InfoType {
 internal class InfoSetting(
   name: String?,
   val text: String,
-  val type: InfoType = InfoType.INFO
+  val type: InfoType = InfoType.INFO,
 ) : Setting<String>(name ?: "", "Info", "") {
 
   override fun read(element: JsonElement) {}

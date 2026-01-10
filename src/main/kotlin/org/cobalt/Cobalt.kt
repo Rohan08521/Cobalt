@@ -39,13 +39,17 @@ object Cobalt : ClientModInitializer {
     println("Cobalt Mod Initialized")
   }
 
-  @JvmStatic private var rotationExec: IRotationExec = RotationExec
+  @JvmStatic
+  private var rotationExec: IRotationExec = RotationExec
 
-  @JvmStatic private var pathExec: IPathExec? = null
+  @JvmStatic
+  private var pathExec: IPathExec? = null
 
-  @JvmStatic fun getRotationExec() = rotationExec
+  @JvmStatic
+  fun getRotationExec() = rotationExec
 
-  @JvmStatic fun getPathExec() = pathExec
+  @JvmStatic
+  fun getPathExec() = pathExec
 
   @JvmStatic
   fun setPathExec(pathExec: IPathExec) {

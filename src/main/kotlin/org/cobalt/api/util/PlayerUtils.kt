@@ -8,14 +8,14 @@ import org.cobalt.Cobalt.mc
 object PlayerUtils {
 
   /**
-  * @return The player's current position
-  */
+   * @return The player's current position
+   */
   val position: BlockPos?
     get() = mc.player?.position()
 
- /**
-  * @return The player's current FOV
-  */
+  /**
+   * @return The player's current FOV
+   */
   val fov: Int
     get() = mc.options.fov.value
 

@@ -62,10 +62,11 @@ object Render3D {
     thickness: Float = 1f,
   ) {
     if (!FrustumUtils.isVisible(
-      context.frustum,
-      min(start.x, end.x), min(start.y, end.y), min(start.z, end.z),
-      max(start.x, end.x), max(start.y, end.y), max(start.z, end.z)
-    )) return
+        context.frustum,
+        min(start.x, end.x), min(start.y, end.y), min(start.z, end.z),
+        max(start.x, end.x), max(start.y, end.y), max(start.z, end.z)
+      )
+    ) return
 
     val matrix = context.matrixStack ?: return
     val bufferSource = context.consumers as? VertexConsumerProvider.Immediate ?: return

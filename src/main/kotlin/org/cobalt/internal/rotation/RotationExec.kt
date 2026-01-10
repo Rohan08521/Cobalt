@@ -15,7 +15,7 @@ object RotationExec : IRotationExec {
   fun rotateTo(
     yaw: Float,
     pitch: Float,
-    strategy: IRotationStrategy
+    strategy: IRotationStrategy,
   ) {
     stopRotating()
 
@@ -36,7 +36,7 @@ object RotationExec : IRotationExec {
   }
 
   override fun onRotate(
-    player: ClientPlayerEntity
+    player: ClientPlayerEntity,
   ) {
     if (!isRotating) {
       return

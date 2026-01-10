@@ -3,7 +3,6 @@ package org.cobalt.internal.helper
 import com.google.gson.*
 import java.io.File
 import org.cobalt.Cobalt
-import org.cobalt.api.module.ModuleManager
 import org.cobalt.internal.loader.AddonLoader
 
 internal object Config {

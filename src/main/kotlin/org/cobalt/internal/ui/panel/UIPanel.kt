@@ -8,7 +8,7 @@ internal abstract class UIPanel(
   x: Float,
   y: Float,
   width: Float,
-  height: Float
+  height: Float,
 ) : UIComponent(x, y, width, height) {
 
   val components = mutableListOf<UIComponent>()

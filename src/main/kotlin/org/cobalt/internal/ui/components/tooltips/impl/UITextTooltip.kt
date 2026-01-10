@@ -1,8 +1,8 @@
 package org.cobalt.internal.ui.components.tooltips.impl
 
+import java.awt.Color
 import org.cobalt.api.util.ui.NVGRenderer
 import org.cobalt.internal.ui.UIComponent
-import java.awt.Color
 
 internal class UITextTooltip(
   private val text: String,

@@ -5,8 +5,8 @@ import net.minecraft.client.MinecraftClient
 import org.cobalt.api.util.ui.NVGRenderer
 import org.cobalt.internal.ui.UIComponent
 import org.cobalt.internal.ui.components.tooltips.TooltipPosition
-import org.cobalt.internal.ui.components.tooltips.impl.UITextTooltip
 import org.cobalt.internal.ui.components.tooltips.UITooltip
+import org.cobalt.internal.ui.components.tooltips.impl.UITextTooltip
 import org.cobalt.internal.ui.panel.UIPanel
 import org.cobalt.internal.ui.screen.UIConfig
 import org.cobalt.internal.ui.util.isHoveringOver
@@ -26,7 +26,9 @@ internal class UISidebar : UIPanel(
   private val userIcon = MinecraftClient.getInstance().session.uuidOrNull?.let {
     try {
       NVGRenderer.createImage("https://mc-heads.net/avatar/${MinecraftClient.getInstance().session.uuidOrNull}/100/face.png")
-    } catch (_: Exception) { steveIcon }
+    } catch (_: Exception) {
+      steveIcon
+    }
   } ?: steveIcon
 
   private val userIconTooltip = UITooltip(
@@ -66,7 +68,7 @@ internal class UISidebar : UIPanel(
 
   private class UIButton(
     iconPath: String,
-    private val onClick: () -> Unit
+    private val onClick: () -> Unit,
   ) : UIComponent(0f, 0f, 22F, 22F) {
 
     val image = NVGRenderer.createImage(iconPath)

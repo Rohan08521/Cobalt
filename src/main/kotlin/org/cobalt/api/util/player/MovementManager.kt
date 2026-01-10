@@ -10,10 +10,10 @@ object MovementManager {
   var isLookLocked = false
 
   /**
-  * Updates the `isLookLocked` state.
-  *
-  * @param state The new lock state. Defaults to `true`.
-  */
+   * Updates the `isLookLocked` state.
+   *
+   * @param state The new lock state. Defaults to `true`.
+   */
   fun setLookLock(state: Boolean = true) {
     isLookLocked = state
   }

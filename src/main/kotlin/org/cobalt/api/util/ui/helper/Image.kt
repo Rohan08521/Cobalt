@@ -33,7 +33,7 @@ class Image(
   val identifier: String,
   var isSVG: Boolean = false,
   var stream: InputStream = getStream(identifier),
-  private var buffer: ByteBuffer? = null
+  private var buffer: ByteBuffer? = null,
 ) {
 
   init {

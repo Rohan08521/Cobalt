@@ -25,7 +25,7 @@ object AddonLoader {
         val modMeta = entry.provider.metadata
         val metadata = AddonMetadata(
           id = modMeta.id,
-          name   = modMeta.name,
+          name = modMeta.name,
           version = modMeta.version?.toString() ?: "unknown",
           entrypoints = listOf(entry.entrypoint.javaClass.name),
           mixins = listOf()

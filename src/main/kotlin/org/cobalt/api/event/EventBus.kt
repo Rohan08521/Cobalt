@@ -97,7 +97,8 @@ object EventBus {
         }
 
         register(instance)
-      } catch (_: Exception) { }
+      } catch (_: Exception) {
+      }
     }
   }
 
@@ -112,13 +113,13 @@ object EventBus {
    * @author oblongboot
    */
   fun registerEvent(eventClass: Class<out Event>, runnable: Runnable) {
-      dynamicRunnables.computeIfAbsent(eventClass) { mutableListOf() }.add(runnable)
+    dynamicRunnables.computeIfAbsent(eventClass) { mutableListOf() }.add(runnable)
   }
 
   fun handleDynamic(event: Event) {
-      dynamicRunnables
-          .filter { (clazz, _) -> clazz.isAssignableFrom(event::class.java) }
-          .forEach { (_, listeners) -> listeners.forEach { it.run() } }
+    dynamicRunnables
+      .filter { (clazz, _) -> clazz.isAssignableFrom(event::class.java) }
+      .forEach { (_, listeners) -> listeners.forEach { it.run() } }
   }
 
 }

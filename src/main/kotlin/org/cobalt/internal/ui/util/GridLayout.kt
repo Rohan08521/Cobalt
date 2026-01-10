@@ -18,7 +18,7 @@ internal class GridLayout(
   fun layout(
     startX: Float,
     startY: Float,
-    components: List<UIComponent>
+    components: List<UIComponent>,
   ) {
     components.forEachIndexed { index, component ->
       val col = index % columns

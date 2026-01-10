@@ -73,7 +73,15 @@ internal class UITooltip(
       )
 
       NVGRenderer.rect(tooltipX, tooltipY, tooltipContent.width, tooltipContent.height, bgColor.rgb, 4F)
-      NVGRenderer.hollowRect(tooltipX, tooltipY, tooltipContent.width, tooltipContent.height, 1.5F,  Color(42, 42, 42).rgb, 4F)
+      NVGRenderer.hollowRect(
+        tooltipX,
+        tooltipY,
+        tooltipContent.width,
+        tooltipContent.height,
+        1.5F,
+        Color(42, 42, 42).rgb,
+        4F
+      )
 
       tooltipContent.x = tooltipX
       tooltipContent.y = tooltipY

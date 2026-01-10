@@ -9,4 +9,4 @@ inline val mouseY: Double
   get() = mc.mouse.y
 
 fun isHoveringOver(x: Float, y: Float, width: Float, height: Float): Boolean =
-    mouseX >= x && mouseX <= x + width && mouseY >= y && mouseY <= y + height
+  mouseX >= x && mouseX <= x + width && mouseY >= y && mouseY <= y + height

@@ -20,16 +20,19 @@ internal class UIInfoSetting(private val setting: InfoSetting) : UIComponent(
         Color(61, 94, 149, 150).rgb,
         Color(61, 94, 149, 255).rgb
       )
+
       InfoType.WARNING -> Triple(
         Color(184, 134, 11, 25).rgb,
         Color(184, 134, 11, 150).rgb,
         Color(184, 134, 11, 255).rgb
       )
+
       InfoType.SUCCESS -> Triple(
         Color(34, 139, 34, 25).rgb,
         Color(34, 139, 34, 150).rgb,
         Color(34, 139, 34, 255).rgb
       )
+
       InfoType.ERROR -> Triple(
         Color(178, 34, 34, 25).rgb,
         Color(178, 34, 34, 150).rgb,

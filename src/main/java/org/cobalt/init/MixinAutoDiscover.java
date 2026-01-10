@@ -67,7 +67,7 @@ public class MixinAutoDiscover implements IMixinConfigPlugin {
             .replace(".class", "");
 
           if (!className.isEmpty()) {
-              mixins.add(className);
+            mixins.add(className);
           }
         });
     }
@@ -84,8 +84,8 @@ public class MixinAutoDiscover implements IMixinConfigPlugin {
 
         if (
           entryName.startsWith(mixinPath) &&
-          entryName.endsWith(".class") &&
-          !entryName.endsWith("package-info.class")
+            entryName.endsWith(".class") &&
+            !entryName.endsWith("package-info.class")
         ) {
           String className = entryName
             .replace("/", ".")
@@ -117,12 +117,15 @@ public class MixinAutoDiscover implements IMixinConfigPlugin {
   }
 
   @Override
-  public void acceptTargets(Set<String> myTargets, Set<String> otherTargets) {}
+  public void acceptTargets(Set<String> myTargets, Set<String> otherTargets) {
+  }
 
   @Override
-  public void preApply(String targetClassName, ClassNode targetClass, String mixinClassName, IMixinInfo mixinInfo) {}
+  public void preApply(String targetClassName, ClassNode targetClass, String mixinClassName, IMixinInfo mixinInfo) {
+  }
 
   @Override
-  public void postApply(String targetClassName, ClassNode targetClass, String mixinClassName, IMixinInfo mixinInfo) {}
+  public void postApply(String targetClassName, ClassNode targetClass, String mixinClassName, IMixinInfo mixinInfo) {
+  }
 
 }

@@ -9,6 +9,13 @@ import kotlin.math.round
 import net.minecraft.client.gl.GlBackend
 import net.minecraft.client.texture.GlTexture
 import org.cobalt.Cobalt.mc
+import org.cobalt.api.util.ui.NVGRenderer.beginFrame
+import org.cobalt.api.util.ui.NVGRenderer.endFrame
+import org.cobalt.api.util.ui.NVGRenderer.image
+import org.cobalt.api.util.ui.NVGRenderer.pop
+import org.cobalt.api.util.ui.NVGRenderer.popScissor
+import org.cobalt.api.util.ui.NVGRenderer.push
+import org.cobalt.api.util.ui.NVGRenderer.text
 import org.cobalt.api.util.ui.helper.Font
 import org.cobalt.api.util.ui.helper.Gradient
 import org.cobalt.api.util.ui.helper.Image
@@ -24,11 +31,11 @@ import org.lwjgl.system.MemoryUtil.memFree
 
 /**
  * A renderer that uses NanoVG for 2D graphics rendering.
- * 
+ *
  * This object wraps NanoVG functions to make it easier to draw shapes, text,
  * images, and gradients. All drawing must happen between [beginFrame]
  * and [endFrame] calls.
- * 
+ *
  * Implementation from vexel by StellariumMC
  * Original work: https://github.com/StellariumMC/vexel
  *
@@ -57,7 +64,7 @@ object NVGRenderer {
 
   /**
    * Starts a new drawing frame. Call this before any drawing operations.
-   * 
+   *
    * @param width The width of the frame in pixels
    * @param height The height of the frame in pixels
    * @throws IllegalStateException if called while already drawing
@@ -82,7 +89,7 @@ object NVGRenderer {
 
   /**
    * Ends the current drawing frame and restores OpenGL state.
-   * 
+   *
    * @throws IllegalStateException if called when not drawing
    */
   fun endFrame() {
@@ -105,36 +112,36 @@ object NVGRenderer {
 
   /** Saves the current transform state. Use with [pop] to restore it later. */
   fun push() = nvgSave(vg)
-  
+
   /** Restores the transform state saved by the last [push] call. */
   fun pop() = nvgRestore(vg)
-  
+
   /**
    * Scales subsequent drawing operations.
-   * 
+   *
    * @param x Scale factor on the x-axis
    * @param y Scale factor on the y-axis
    */
   fun scale(x: Float, y: Float) = nvgScale(vg, x, y)
-  
+
   /**
    * Translates (moves) subsequent drawing operations.
-   * 
+   *
    * @param x Distance to move on the x-axis
    * @param y Distance to move on the y-axis
    */
   fun translate(x: Float, y: Float) = nvgTranslate(vg, x, y)
-  
+
   /**
    * Rotates subsequent drawing operations.
-   * 
+   *
    * @param amount Rotation amount in radians
    */
   fun rotate(amount: Float) = nvgRotate(vg, amount)
-  
+
   /**
    * Sets the global alpha (transparency) for subsequent drawing operations.
-   * 
+   *
    * @param amount Alpha value between 0 (fully transparent) and 1 (fully opaque)
    */
   fun globalAlpha(amount: Float) = nvgGlobalAlpha(vg, amount.coerceIn(0f, 1f))
@@ -142,7 +149,7 @@ object NVGRenderer {
   /**
    * Pushes a scissor region to clip drawing. Only content inside this region will be visible.
    * Call [popScissor] to remove it. Scissors can be nested.
-   * 
+   *
    * @param x X position of the scissor region
    * @param y Y position of the scissor region
    * @param w Width of the scissor region
@@ -164,7 +171,7 @@ object NVGRenderer {
 
   /**
    * Draws a line between two points.
-   * 
+   *
    * @param x1 Starting X coordinate
    * @param y1 Starting Y coordinate
    * @param x2 Ending X coordinate
@@ -184,7 +191,7 @@ object NVGRenderer {
 
   /**
    * Draws a rectangle with rounded corners on either the top or bottom.
-   * 
+   *
    * @param x X position
    * @param y Y position
    * @param w Width
@@ -222,7 +229,7 @@ object NVGRenderer {
 
   /**
    * Draws a filled rectangle with rounded corners.
-   * 
+   *
    * @param x X position
    * @param y Y position
    * @param w Width
@@ -240,7 +247,7 @@ object NVGRenderer {
 
   /**
    * Draws a filled rectangle with sharp corners.
-   * 
+   *
    * @param x X position
    * @param y Y position
    * @param w Width
@@ -257,7 +264,7 @@ object NVGRenderer {
 
   /**
    * Draws a hollow rectangle outline with rounded corners.
-   * 
+   *
    * @param x X position
    * @param y Y position
    * @param w Width
@@ -278,7 +285,7 @@ object NVGRenderer {
 
   /**
    * Draws a hollow rectangle outline with a gradient stroke.
-   * 
+   *
    * @param x X position
    * @param y Y position
    * @param w Width
@@ -310,7 +317,7 @@ object NVGRenderer {
 
   /**
    * Draws a filled rectangle with a gradient.
-   * 
+   *
    * @param x X position
    * @param y Y position
    * @param w Width
@@ -339,7 +346,7 @@ object NVGRenderer {
 
   /**
    * Draws a filled circle.
-   * 
+   *
    * @param x Center X coordinate
    * @param y Center Y coordinate
    * @param radius Circle radius
@@ -355,7 +362,7 @@ object NVGRenderer {
 
   /**
    * Renders text at the specified position.
-   * 
+   *
    * @param text The text to render
    * @param x X position
    * @param y Y position
@@ -373,7 +380,7 @@ object NVGRenderer {
 
   /**
    * Renders text with a drop shadow effect.
-   * 
+   *
    * @param text The text to render
    * @param x X position
    * @param y Y position
@@ -395,7 +402,7 @@ object NVGRenderer {
 
   /**
    * Calculates the width of the given text when rendered.
-   * 
+   *
    * @param text The text to measure
    * @param size Font size
    * @param font The font to use (defaults to Inter)
@@ -409,7 +416,7 @@ object NVGRenderer {
 
   /**
    * Renders text that automatically wraps to fit within a specified width.
-   * 
+   *
    * @param text The text to render
    * @param x X position
    * @param y Y position
@@ -439,7 +446,7 @@ object NVGRenderer {
 
   /**
    * Calculates the bounds of wrapped text.
-   * 
+   *
    * @param text The text to measure
    * @param w Maximum width before wrapping
    * @param size Font size
@@ -464,7 +471,7 @@ object NVGRenderer {
 
   /**
    * Creates a NanoVG image from an existing OpenGL texture.
-   * 
+   *
    * @param textureId The OpenGL texture ID
    * @param textureWidth Width of the texture
    * @param textureHeight Height of the texture
@@ -481,7 +488,7 @@ object NVGRenderer {
 
   /**
    * Draws an image at the specified position and size.
-   * 
+   *
    * @param image The image to draw
    * @param x X position
    * @param y Y position
@@ -517,7 +524,7 @@ object NVGRenderer {
   /**
    * Loads an image from a resource path. Supports both PNG/JPG and SVG formats.
    * Images are reference-counted, so the same image can be loaded multiple times safely.
-   * 
+   *
    * @param resourcePath Path to the image resource
    * @return The loaded image
    */
@@ -531,7 +538,7 @@ object NVGRenderer {
   /**
    * Deletes an image and frees its resources. Uses reference counting, so the image
    * is only truly deleted when all references are released.
-   * 
+   *
    * @param image The image to delete
    */
   fun deleteImage(image: Image) {

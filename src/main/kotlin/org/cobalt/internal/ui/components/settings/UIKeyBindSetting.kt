@@ -68,7 +68,13 @@ internal class UIKeyBindSetting(private val setting: KeyBindSetting) : UICompone
       setting.value = button
       isListening = false
       return true
-    } else if (isHoveringOver(x + width - textWidth - 40F, y + (height / 2F) - 12.5F, textWidth + 20F, 25F) && button == 0) {
+    } else if (isHoveringOver(
+        x + width - textWidth - 40F,
+        y + (height / 2F) - 12.5F,
+        textWidth + 20F,
+        25F
+      ) && button == 0
+    ) {
       isListening = true
       return true
     }

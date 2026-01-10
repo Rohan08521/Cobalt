@@ -115,21 +115,45 @@ internal class UISearchBar : UIComponent(
         focused = false
         return true
       }
-      GLFW.GLFW_KEY_BACKSPACE -> { inputHandler.backspace(); return true }
-      GLFW.GLFW_KEY_DELETE -> { inputHandler.delete(); return true }
-      GLFW.GLFW_KEY_LEFT -> { inputHandler.moveCursorLeft(shift); return true }
-      GLFW.GLFW_KEY_RIGHT -> { inputHandler.moveCursorRight(shift); return true }
-      GLFW.GLFW_KEY_HOME -> { inputHandler.moveCursorToStart(shift); return true }
-      GLFW.GLFW_KEY_END -> { inputHandler.moveCursorToEnd(shift); return true }
-      GLFW.GLFW_KEY_A -> if (ctrl) { inputHandler.selectAll(); return true }
+
+      GLFW.GLFW_KEY_BACKSPACE -> {
+        inputHandler.backspace(); return true
+      }
+
+      GLFW.GLFW_KEY_DELETE -> {
+        inputHandler.delete(); return true
+      }
+
+      GLFW.GLFW_KEY_LEFT -> {
+        inputHandler.moveCursorLeft(shift); return true
+      }
+
+      GLFW.GLFW_KEY_RIGHT -> {
+        inputHandler.moveCursorRight(shift); return true
+      }
+
+      GLFW.GLFW_KEY_HOME -> {
+        inputHandler.moveCursorToStart(shift); return true
+      }
+
+      GLFW.GLFW_KEY_END -> {
+        inputHandler.moveCursorToEnd(shift); return true
+      }
+
+      GLFW.GLFW_KEY_A -> if (ctrl) {
+        inputHandler.selectAll(); return true
+      }
+
       GLFW.GLFW_KEY_C -> if (ctrl) {
         inputHandler.copy()?.let { MinecraftClient.getInstance().keyboard.clipboard = it }
         return true
       }
+
       GLFW.GLFW_KEY_X -> if (ctrl) {
         inputHandler.cut()?.let { MinecraftClient.getInstance().keyboard.clipboard = it }
         return true
       }
+
       GLFW.GLFW_KEY_V -> if (ctrl) {
         val clipboard = MinecraftClient.getInstance().keyboard.clipboard
         if (clipboard.isNotEmpty()) inputHandler.insertText(clipboard)
