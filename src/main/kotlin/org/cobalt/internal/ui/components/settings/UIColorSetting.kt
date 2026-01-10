@@ -168,8 +168,10 @@ internal class UIColorSetting(private val setting: ColorSetting) : UIComponent(
       updateOpacityFromSlider(bx)
       return true
     }
-
-    return isHoveringOver(px, py, 200F, 250F)
+    
+    return isHoveringOver(px, py, 200F, 250F).also {
+      if (!it) pickerOpen = false
+    }
   }
 
   override fun mouseReleased(button: Int): Boolean {

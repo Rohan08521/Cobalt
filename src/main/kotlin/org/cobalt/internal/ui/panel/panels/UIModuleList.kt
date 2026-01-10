@@ -28,15 +28,13 @@ internal class UIModuleList(
   private val topBar = UITopbar("Modules")
   private val backButton = UIBackButton()
 
-  /**
-   * Modules list (left side)
-   */
-  private val modules = addon.getModules()
+  private val allModules = addon.getModules()
     .withIndex()
     .map { (index, module) ->
       UIModule(module, this, index == 0)
     }
 
+  private var modules = allModules
   private val modulesScroll = ScrollHandler()
   private val modulesLayout = GridLayout(
     columns = 1,
@@ -46,7 +44,6 @@ internal class UIModuleList(
   )
 
   private var module = modules.first()
-
 
   /**
    * Settings list (right side)
@@ -78,6 +75,28 @@ internal class UIModuleList(
     components.addAll(modules)
     components.add(backButton)
     components.add(topBar)
+
+    topBar.searchChanged { searchText ->
+      modules = if (searchText.isEmpty()) {
+        allModules
+      } else {
+        val searchLower = searchText.lowercase()
+        allModules.filter { uiModule ->
+          uiModule.module.name.lowercase().contains(searchLower) ||
+            uiModule.module.getSettings().any { setting ->
+              setting.name.lowercase().contains(searchLower) ||
+                setting.description.lowercase().contains(searchLower)
+            }
+        }
+      }
+
+      if (modules.isNotEmpty()) {
+        setModule(modules.first())
+      } else {
+        components.removeAll(settings)
+        settings = emptyList()
+      }
+    }
   }
 
   override fun render() {
@@ -105,7 +124,6 @@ internal class UIModuleList(
       15F, Color(230, 230, 230).rgb
     )
 
-    // Render modules list (left side)
     val startY = y + topBar.height + backButton.height + 40F
     val visibleHeight = height - (topBar.height + backButton.height + 40F)
 
@@ -118,7 +136,6 @@ internal class UIModuleList(
 
     NVGRenderer.popScissor()
 
-    // Render settings list (right side)
     val settingsStartX = x + width / 4F + 20F
 
     settingsScroll.setMaxScroll(settingsLayout.contentHeight(settings.size) - 15F, visibleHeight + 35F)
@@ -169,6 +186,15 @@ internal class UIModuleList(
     components.removeAll(settings)
 
     this.settings = module.getSettings()
+      .filter {
+        if (topBar.getSearchText().isEmpty()) {
+          true
+        } else {
+          val searchLower = topBar.getSearchText().lowercase()
+
+          it.name.lowercase().contains(searchLower) || it.description.lowercase().contains(searchLower)
+        }
+      }
       .map {
         when (it) {
           is CheckboxSetting -> UICheckboxSetting(it)

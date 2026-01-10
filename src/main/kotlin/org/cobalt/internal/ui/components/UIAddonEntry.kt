@@ -11,7 +11,7 @@ import org.cobalt.internal.ui.screen.UIConfig
 import org.cobalt.internal.ui.util.isHoveringOver
 
 internal class UIAddonEntry(
-  private val metadata: AddonMetadata,
+  val metadata: AddonMetadata,
   private val addon: Addon,
 ) : UIComponent(
   x = 0F,
@@ -20,7 +20,9 @@ internal class UIAddonEntry(
   height = 70F,
 ) {
 
-  val addonIcon = AddonLoader.getAddonIcon(metadata.id) ?: boxIcon
+  val addonIcon = metadata.icon?.let {
+    AddonLoader.getAddonIcon(it)
+  } ?: boxIcon
 
   override fun render() {
     NVGRenderer.rect(
@@ -37,7 +39,7 @@ internal class UIAddonEntry(
 
     NVGRenderer.image(
       addonIcon, x + 20F, y + height / 2F - 15F, 30F, 30F,
-      colorMask = Color(200, 200, 200).rgb
+      colorMask = Color(42, 42, 42).rgb
     )
 
     NVGRenderer.text(

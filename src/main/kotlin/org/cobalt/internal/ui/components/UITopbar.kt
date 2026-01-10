@@ -1,6 +1,8 @@
 package org.cobalt.internal.ui.components
 
 import java.awt.Color
+import net.minecraft.client.input.CharInput
+import net.minecraft.client.input.KeyInput
 import org.cobalt.api.util.ui.NVGRenderer
 import org.cobalt.internal.ui.UIComponent
 
@@ -14,27 +16,48 @@ internal class UITopbar(
 ) {
 
   private val searchBar = UISearchBar()
+  private var onSearchChanged: ((String) -> Unit)? = null
+  private var lastSearchText = ""
 
   override fun render() {
     NVGRenderer.text(title, x + 40F, y + (height / 2) - 10F, 20F, Color(230, 230, 230).rgb)
     NVGRenderer.line(x, y + height, x + width, y + height, 1F, Color(42, 42, 42).rgb)
 
     searchBar
-      .updateBounds(x, y)
+      .updateBounds(x + width - 320F, y + 15F)
       .render()
+
+    val currentSearchText = searchBar.getSearchText()
+    if (currentSearchText != lastSearchText) {
+      lastSearchText = currentSearchText
+      onSearchChanged?.invoke(currentSearchText)
+    }
   }
 
-  private class UISearchBar : UIComponent(
-    x = 0F,
-    y = 0F,
-    width = 0F,
-    height = 0F,
-  ) {
+  override fun mouseClicked(button: Int): Boolean {
+    return searchBar.mouseClicked(button)
+  }
 
-    override fun render() {
+  override fun mouseReleased(button: Int): Boolean {
+    return searchBar.mouseReleased(button)
+  }
 
-    }
+  override fun mouseDragged(button: Int, offsetX: Double, offsetY: Double): Boolean {
+    return searchBar.mouseDragged(button, offsetX, offsetY)
+  }
 
+  override fun charTyped(input: CharInput): Boolean {
+    return searchBar.charTyped(input)
+  }
+
+  override fun keyPressed(input: KeyInput): Boolean {
+    return searchBar.keyPressed(input)
+  }
+
+  fun getSearchText(): String = searchBar.getSearchText()
+  fun clearSearch() = searchBar.clearSearch()
+  fun searchChanged(callback: (String) -> Unit) {
+    onSearchChanged = callback
   }
 
 }

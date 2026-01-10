@@ -1,10 +1,9 @@
-package org.cobalt.internal.ui.components.settings
+package org.cobalt.internal.ui.components
 
 import java.awt.Color
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.input.CharInput
 import net.minecraft.client.input.KeyInput
-import org.cobalt.api.module.setting.impl.TextSetting
 import org.cobalt.api.util.ui.NVGRenderer
 import org.cobalt.internal.ui.UIComponent
 import org.cobalt.internal.ui.util.TextInputHandler
@@ -12,42 +11,48 @@ import org.cobalt.internal.ui.util.isHoveringOver
 import org.cobalt.internal.ui.util.mouseX
 import org.lwjgl.glfw.GLFW
 
-internal class UITextSetting(private val setting: TextSetting) : UIComponent(
+internal class UISearchBar : UIComponent(
   x = 0F,
   y = 0F,
-  width = 627.5F,
-  height = 60F,
+  width = 300F,
+  height = 40F,
 ) {
 
-  private val inputHandler = TextInputHandler(setting.value)
+  private val inputHandler = TextInputHandler("", 64)
   private var focused = false
   private var dragging = false
 
-  override fun render() {
-    NVGRenderer.rect(x, y, width, height, Color(42, 42, 42, 50).rgb, 10F)
-    NVGRenderer.hollowRect(x, y, width, height, 1F, Color(42, 42, 42).rgb, 10F)
-    NVGRenderer.text(setting.name, x + 20F, y + 14.5F, 15F, Color(230, 230, 230).rgb)
-    NVGRenderer.text(setting.description, x + 20F, y + 32F, 12F, Color(179, 179, 179).rgb)
+  fun getSearchText(): String = inputHandler.getText()
 
-    val inputX = x + width - 280F
-    val inputY = y + 15F
+  fun clearSearch() {
+    inputHandler.setText("")
+    focused = false
+  }
+
+  override fun render() {
     val borderColor = if (focused) Color(61, 94, 149).rgb else Color(42, 42, 42).rgb
 
-    NVGRenderer.rect(inputX, inputY, 260F, 30F, Color(42, 42, 42, 50).rgb, 5F)
-    NVGRenderer.hollowRect(inputX, inputY, 260F, 30F, 2F, borderColor, 5F)
+    NVGRenderer.rect(x, y, width, height, Color(42, 42, 42, 50).rgb, 5F)
+    NVGRenderer.hollowRect(x, y, width, height, 2F, borderColor, 5F)
 
-    val textX = inputX + 10F
-    val textY = inputY + 9F
+    val textX = x + 15F
+    val textY = y + 14F
 
-    if (focused) inputHandler.updateScroll(240F, 13F)
+    if (focused) inputHandler.updateScroll(width - 30F, 13F)
 
-    NVGRenderer.pushScissor(inputX + 10F, inputY, 240F, 30F)
+    NVGRenderer.pushScissor(x + 15F, y + 5F, width - 30F, height - 10F)
 
     if (focused) {
       inputHandler.renderSelection(textX, textY, 13F, 13F, Color(70, 130, 180, 100).rgb)
     }
 
-    NVGRenderer.text(inputHandler.getText(), textX - inputHandler.getTextOffset(), textY, 13F, Color(230, 230, 230).rgb)
+    val text = inputHandler.getText()
+
+    if (text.isEmpty() && !focused) {
+      NVGRenderer.text("Search...", textX, textY, 13F, Color(128, 128, 128).rgb)
+    } else {
+      NVGRenderer.text(text, textX - inputHandler.getTextOffset(), textY, 13F, Color(230, 230, 230).rgb)
+    }
 
     if (focused) {
       inputHandler.renderCursor(textX, textY, 13F, Color(230, 230, 230).rgb)
@@ -59,18 +64,14 @@ internal class UITextSetting(private val setting: TextSetting) : UIComponent(
   override fun mouseClicked(button: Int): Boolean {
     if (button != 0) return false
 
-    val inputX = x + width - 280F
-    val inputY = y + 15F
-
-    if (isHoveringOver(inputX, inputY, 260F, 30F)) {
+    if (isHoveringOver(x, y, width, height)) {
       focused = true
       dragging = true
-      inputHandler.startSelection(mouseX.toFloat(), inputX + 10F, 13F)
+      inputHandler.startSelection(mouseX.toFloat(), x + 15F, 13F)
       return true
     }
 
     if (focused) {
-      setting.value = inputHandler.getText()
       focused = false
       return true
     }
@@ -85,8 +86,7 @@ internal class UITextSetting(private val setting: TextSetting) : UIComponent(
 
   override fun mouseDragged(button: Int, offsetX: Double, offsetY: Double): Boolean {
     if (button == 0 && dragging && focused) {
-      val inputX = x + width - 280F
-      inputHandler.updateSelection(mouseX.toFloat(), inputX + 10F, 13F)
+      inputHandler.updateSelection(mouseX.toFloat(), x + 15F, 13F)
       return true
     }
     return false
@@ -111,8 +111,7 @@ internal class UITextSetting(private val setting: TextSetting) : UIComponent(
     val shift = input.modifiers and GLFW.GLFW_MOD_SHIFT != 0
 
     when (input.key) {
-      GLFW.GLFW_KEY_ESCAPE, GLFW.GLFW_KEY_ENTER -> {
-        setting.value = inputHandler.getText()
+      GLFW.GLFW_KEY_ESCAPE -> {
         focused = false
         return true
       }

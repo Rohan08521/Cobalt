@@ -19,7 +19,8 @@ internal class UIAddonList : UIPanel(
 ) {
 
   private val topBar = UITopbar("Addons")
-  private val entries = AddonLoader.getAddons().map { UIAddonEntry(it.first, it.second) }
+  private val allEntries = AddonLoader.getAddons().map { UIAddonEntry(it.first, it.second) }
+  private var entries = allEntries
 
   private val gridLayout = GridLayout(
     columns = 3,
@@ -31,8 +32,16 @@ internal class UIAddonList : UIPanel(
   private val scrollHandler = ScrollHandler()
 
   init {
-    components.addAll(entries)
+    components.addAll(allEntries)
     components.add(topBar)
+
+    topBar.searchChanged { searchText ->
+      entries = if (searchText.isEmpty()) {
+        allEntries
+      } else {
+        allEntries.filter { it.metadata.name.lowercase().contains(searchText.lowercase()) }
+      }
+    }
   }
 
   override fun render() {

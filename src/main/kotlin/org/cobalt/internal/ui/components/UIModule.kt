@@ -11,7 +11,7 @@ import org.cobalt.internal.ui.panel.panels.UIModuleList
 import org.cobalt.internal.ui.util.isHoveringOver
 
 internal class UIModule(
-  private val module: Module,
+  val module: Module,
   private val panel: UIModuleList,
   private var selected: Boolean,
 ) : UIComponent(
