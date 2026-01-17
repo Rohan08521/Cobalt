@@ -17,6 +17,7 @@ object AddonLoader {
 
   private val addonsDir: Path = Paths.get("config/cobalt/addons/")
   private val addons = mutableListOf<Pair<AddonMetadata, Addon>>()
+  private val addonsById = mutableMapOf<String, AddonMetadata>()
   private val gson = Gson()
 
   fun findAddons() {
@@ -38,6 +39,7 @@ object AddonLoader {
         }
 
         addons += metadata to addonInstance
+        addonsById[metadata.id] = metadata
       }
     }
 
@@ -49,8 +51,12 @@ object AddonLoader {
     try {
       Files.newDirectoryStream(addonsDir, "*.jar").use { stream ->
         for (jarPath in stream) {
-          FabricLauncherBase.getLauncher().addToClassPath(jarPath)
-          loadAddon(jarPath)
+          try {
+            loadAddon(jarPath)
+            FabricLauncherBase.getLauncher().addToClassPath(jarPath)
+          } catch (e: Exception) {
+            e.printStackTrace()
+          }
         }
       }
     } catch (e: Exception) {
@@ -65,6 +71,10 @@ object AddonLoader {
 
       val metadata = zip.getInputStream(jsonEntry).use { input ->
         gson.fromJson(input.reader(), AddonMetadata::class.java)
+      }
+
+      require(metadata.entrypoints.isNotEmpty()) {
+        "Addon ${metadata.id} has no entrypoints defined"
       }
 
       synchronized(Mixins::class.java) {
@@ -82,7 +92,7 @@ object AddonLoader {
           )
         }
 
-        val instance = Class.forName(entrypoint).let {
+        val instance = Class.forName(entrypoint, true, jarPath.javaClass.classLoader).let {
           try {
             it.getField("INSTANCE").get(null)
           } catch (_: NoSuchFieldException) {
@@ -101,6 +111,7 @@ object AddonLoader {
         addons += metadata to instance
       }
 
+      addonsById[metadata.id] = metadata
       return metadata
     }
   }
@@ -111,7 +122,7 @@ object AddonLoader {
 
   fun getAddonIcon(addonId: String): Image? {
     return NVGRenderer.createImage(
-      addons.find { it.first.id == addonId }?.first?.icon ?: return null
+      addonsById[addonId]?.icon ?: return null
     )
   }
 
