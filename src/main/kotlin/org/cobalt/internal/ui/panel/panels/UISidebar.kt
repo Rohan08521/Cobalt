@@ -23,13 +23,11 @@ internal class UISidebar : UIPanel(
   }
 
   private val steveIcon = NVGRenderer.createImage("/assets/cobalt/steve.png")
-  private val userIcon = Minecraft.getInstance().user.profileId?.let {
-    try {
-      NVGRenderer.createImage("https://mc-heads.net/avatar/${Minecraft.getInstance().user.profileId}/100/face.png")
-    } catch (_: Exception) {
-      steveIcon
-    }
-  } ?: steveIcon
+  private val userIcon = try {
+    NVGRenderer.createImage("https://mc-heads.net/avatar/${Minecraft.getInstance().user.profileId ?: "a"}/100/face.png")
+  } catch (_: Exception) {
+    steveIcon
+  }
 
   private val userIconTooltip = UITooltip(
     content = { UITextTooltip("Hello, ${Minecraft.getInstance().user.name}!") },
