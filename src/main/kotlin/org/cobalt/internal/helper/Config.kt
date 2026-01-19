@@ -5,14 +5,14 @@ import com.google.gson.JsonArray
 import com.google.gson.JsonObject
 import com.google.gson.JsonParser
 import java.io.File
-import net.minecraft.client.MinecraftClient
+import net.minecraft.client.Minecraft
 import org.cobalt.internal.loader.AddonLoader
 
 internal object Config {
 
-  private val mc: MinecraftClient = MinecraftClient.getInstance()
+  private val mc: Minecraft = Minecraft.getInstance()
   private val gson = GsonBuilder().setPrettyPrinting().create()
-  private val modulesFile = File(mc.runDirectory, "config/cobalt/addons.json")
+  private val modulesFile = File(mc.gameDirectory, "config/cobalt/addons.json")
 
   fun loadModulesConfig() {
     if (!modulesFile.exists()) {

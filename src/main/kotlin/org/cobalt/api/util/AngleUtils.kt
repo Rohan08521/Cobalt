@@ -2,18 +2,18 @@ package org.cobalt.api.util
 
 import kotlin.math.atan2
 import kotlin.math.sqrt
-import net.minecraft.client.MinecraftClient
-import net.minecraft.client.network.ClientPlayerEntity
-import net.minecraft.entity.Entity
-import net.minecraft.util.math.Vec3d
+import net.minecraft.client.Minecraft
+import net.minecraft.client.player.LocalPlayer
+import net.minecraft.world.entity.Entity
+import net.minecraft.world.phys.Vec3
 import org.cobalt.api.util.helper.Rotation
 
 object AngleUtils {
 
-  private val mc: MinecraftClient =
-    MinecraftClient.getInstance()
+  private val mc: Minecraft =
+    Minecraft.getInstance()
 
-  private val player: ClientPlayerEntity?
+  private val player: LocalPlayer?
     get() = mc.player
 
   fun normalizeAngle(angle: Float): Float {
@@ -30,7 +30,7 @@ object AngleUtils {
     return delta
   }
 
-  fun getRotation(from: Vec3d, to: Vec3d): Rotation {
+  fun getRotation(from: Vec3, to: Vec3): Rotation {
     val xDiff = to.x - from.x
     val yDiff = to.y - from.y
     val zDiff = to.z - from.z
@@ -41,14 +41,14 @@ object AngleUtils {
     return Rotation(Math.toDegrees(atan2(zDiff, xDiff)).toFloat() - 90f, -Math.toDegrees(atan2(yDiff, dist)).toFloat())
   }
 
-  fun getRotation(to: Vec3d): Rotation {
-    return getRotation(player!!.eyePos, to)
+  fun getRotation(to: Vec3): Rotation {
+    return getRotation(player!!.eyePosition, to)
   }
 
   fun getRotation(to: Entity): Rotation {
     return getRotation(
-      player!!.eyePos,
-      to.entityPos.add(0.0, ((to.height * 0.85) + (Math.random() * 0.3 - 0.15)).coerceAtMost(1.7), 0.0)
+      player!!.eyePosition,
+      to.position().add(0.0, ((to.bbHeight * 0.85) + (Math.random() * 0.3 - 0.15)).coerceAtMost(1.7), 0.0)
     )
   }
 

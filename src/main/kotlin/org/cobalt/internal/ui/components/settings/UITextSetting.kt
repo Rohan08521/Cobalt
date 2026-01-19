@@ -1,9 +1,9 @@
 package org.cobalt.internal.ui.components.settings
 
 import java.awt.Color
-import net.minecraft.client.MinecraftClient
-import net.minecraft.client.input.CharInput
-import net.minecraft.client.input.KeyInput
+import net.minecraft.client.Minecraft
+import net.minecraft.client.input.CharacterEvent
+import net.minecraft.client.input.KeyEvent
 import org.cobalt.api.module.setting.impl.TextSetting
 import org.cobalt.api.util.ui.NVGRenderer
 import org.cobalt.internal.ui.UIComponent
@@ -92,7 +92,7 @@ internal class UITextSetting(private val setting: TextSetting) : UIComponent(
     return false
   }
 
-  override fun charTyped(input: CharInput): Boolean {
+  override fun charTyped(input: CharacterEvent): Boolean {
     if (!focused) return false
 
     val char = input.codepoint.toChar()
@@ -104,7 +104,7 @@ internal class UITextSetting(private val setting: TextSetting) : UIComponent(
     return false
   }
 
-  override fun keyPressed(input: KeyInput): Boolean {
+  override fun keyPressed(input: KeyEvent): Boolean {
     if (!focused) return false
 
     val ctrl = input.modifiers and GLFW.GLFW_MOD_CONTROL != 0
@@ -146,17 +146,17 @@ internal class UITextSetting(private val setting: TextSetting) : UIComponent(
       }
 
       GLFW.GLFW_KEY_C -> if (ctrl) {
-        inputHandler.copy()?.let { MinecraftClient.getInstance().keyboard.clipboard = it }
+        inputHandler.copy()?.let { Minecraft.getInstance().keyboardHandler.clipboard = it }
         return true
       }
 
       GLFW.GLFW_KEY_X -> if (ctrl) {
-        inputHandler.cut()?.let { MinecraftClient.getInstance().keyboard.clipboard = it }
+        inputHandler.cut()?.let { Minecraft.getInstance().keyboardHandler.clipboard = it }
         return true
       }
 
       GLFW.GLFW_KEY_V -> if (ctrl) {
-        val clipboard = MinecraftClient.getInstance().keyboard.clipboard
+        val clipboard = Minecraft.getInstance().keyboardHandler.clipboard
         if (clipboard.isNotEmpty()) inputHandler.insertText(clipboard)
         return true
       }

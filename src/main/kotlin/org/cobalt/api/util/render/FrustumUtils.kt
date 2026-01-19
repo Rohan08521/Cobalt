@@ -1,14 +1,14 @@
 package org.cobalt.api.util.render
 
-import net.minecraft.client.render.Frustum
-import net.minecraft.util.math.Box
+import net.minecraft.client.renderer.culling.Frustum
+import net.minecraft.world.phys.AABB
 import org.cobalt.mixin.render.Frustum_FrustumInvoker
 import org.joml.FrustumIntersection
 
 object FrustumUtils {
 
   @JvmStatic
-  fun isVisible(frustum: Frustum, box: Box): Boolean {
+  fun isVisible(frustum: Frustum, box: AABB): Boolean {
     return isVisible(frustum, box.minX, box.minY, box.minZ, box.maxX, box.maxY, box.maxZ)
   }
 
@@ -22,7 +22,7 @@ object FrustumUtils {
     maxY: Double,
     maxZ: Double,
   ): Boolean {
-    val result = (frustum as Frustum_FrustumInvoker).invokeIntersectAab(minX, minY, minZ, maxX, maxY, maxZ)
+    val result = (frustum as Frustum_FrustumInvoker).invokeCubeInFrustum(minX, minY, minZ, maxX, maxY, maxZ)
     return result == FrustumIntersection.INSIDE || result == FrustumIntersection.INTERSECT
   }
 

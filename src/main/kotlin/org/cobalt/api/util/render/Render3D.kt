@@ -4,10 +4,10 @@ import com.mojang.blaze3d.systems.RenderSystem
 import java.awt.Color
 import kotlin.math.max
 import kotlin.math.min
-import net.minecraft.client.render.VertexConsumerProvider
-import net.minecraft.client.render.VertexRendering
-import net.minecraft.util.math.Box
-import net.minecraft.util.math.Vec3d
+import net.minecraft.client.renderer.MultiBufferSource
+import net.minecraft.client.renderer.ShapeRenderer
+import net.minecraft.world.phys.AABB
+import net.minecraft.world.phys.Vec3
 import org.cobalt.api.event.impl.render.WorldRenderContext
 import org.cobalt.internal.helper.RenderLayers
 import org.joml.Vector3f
@@ -15,13 +15,13 @@ import org.joml.Vector3f
 object Render3D {
 
   @JvmStatic
-  fun drawBox(context: WorldRenderContext, box: Box, color: Color, esp: Boolean = false) {
+  fun drawBox(context: WorldRenderContext, box: AABB, color: Color, esp: Boolean = false) {
     if (!FrustumUtils.isVisible(context.frustum, box.minX, box.minY, box.minZ, box.maxX, box.maxY, box.maxZ)) {
       return
     }
 
     val matrix = context.matrixStack ?: return
-    val bufferSource = context.consumers as? VertexConsumerProvider.Immediate ?: return
+    val bufferSource = context.consumers as? MultiBufferSource.BufferSource ?: return
 
     val r = color.red / 255f
     val g = color.green / 255f
@@ -30,10 +30,10 @@ object Render3D {
     val fillLayer = if (esp) RenderLayers.TRIANGLE_STRIP_ESP else RenderLayers.TRIANGLE_STRIP
     val lineLayer = if (esp) RenderLayers.LINE_LIST_ESP else RenderLayers.LINE_LIST
 
-    matrix.push()
-    with(context.camera.pos) { matrix.translate(-x, -y, -z) }
+    matrix.pushPose()
+    with(context.camera.position) { matrix.translate(-x, -y, -z) }
 
-    VertexRendering.drawFilledBox(
+    ShapeRenderer.addChainedFilledBoxVertices(
       matrix,
       bufferSource.getBuffer(fillLayer),
       box.minX, box.minY, box.minZ,
@@ -41,24 +41,24 @@ object Render3D {
       r, g, b, 150 / 255F
     )
 
-    VertexRendering.drawBox(
-      matrix.peek(),
+    ShapeRenderer.renderLineBox(
+      matrix.last(),
       bufferSource.getBuffer(lineLayer),
       box.minX, box.minY, box.minZ,
       box.maxX, box.maxY, box.maxZ,
       r, g, b, 1f
     )
 
-    matrix.pop()
-    bufferSource.draw(fillLayer)
-    bufferSource.draw(lineLayer)
+    matrix.popPose()
+    bufferSource.endBatch(fillLayer)
+    bufferSource.endBatch(lineLayer)
   }
 
   @JvmStatic
   fun drawLine(
     context: WorldRenderContext,
-    start: Vec3d,
-    end: Vec3d,
+    start: Vec3,
+    end: Vec3,
     color: Color,
     esp: Boolean = false,
     thickness: Float = 1f,
@@ -71,17 +71,17 @@ object Render3D {
     ) return
 
     val matrix = context.matrixStack ?: return
-    val bufferSource = context.consumers as? VertexConsumerProvider.Immediate ?: return
+    val bufferSource = context.consumers as? MultiBufferSource.BufferSource ?: return
     val layer = if (esp) RenderLayers.LINE_LIST_ESP else RenderLayers.LINE_LIST
     RenderSystem.lineWidth(thickness)
 
-    matrix.push()
-    with(context.camera.pos) { matrix.translate(-x, -y, -z) }
+    matrix.pushPose()
+    with(context.camera.position) { matrix.translate(-x, -y, -z) }
 
     val startOffset = Vector3f(start.x.toFloat(), start.y.toFloat(), start.z.toFloat())
     val direction = end.subtract(start)
 
-    VertexRendering.drawVector(
+    ShapeRenderer.renderVector(
       matrix,
       bufferSource.getBuffer(layer),
       startOffset,
@@ -89,8 +89,8 @@ object Render3D {
       color.rgb
     )
 
-    matrix.pop()
-    bufferSource.draw(layer)
+    matrix.popPose()
+    bufferSource.endBatch(layer)
   }
 
 }

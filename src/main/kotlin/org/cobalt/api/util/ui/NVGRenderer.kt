@@ -1,14 +1,14 @@
 package org.cobalt.api.util.ui
 
+import com.mojang.blaze3d.opengl.GlDevice
 import com.mojang.blaze3d.opengl.GlStateManager
+import com.mojang.blaze3d.opengl.GlTexture
 import com.mojang.blaze3d.systems.RenderSystem
 import java.nio.ByteBuffer
 import kotlin.math.max
 import kotlin.math.min
 import kotlin.math.round
-import net.minecraft.client.MinecraftClient
-import net.minecraft.client.gl.GlBackend
-import net.minecraft.client.texture.GlTexture
+import net.minecraft.client.Minecraft
 import org.cobalt.api.util.ui.NVGRenderer.beginFrame
 import org.cobalt.api.util.ui.NVGRenderer.endFrame
 import org.cobalt.api.util.ui.NVGRenderer.image
@@ -44,8 +44,8 @@ import org.lwjgl.system.MemoryUtil.memFree
 @Suppress("unused")
 object NVGRenderer {
 
-  private val mc: MinecraftClient =
-    MinecraftClient.getInstance()
+  private val mc: Minecraft =
+    Minecraft.getInstance()
 
   private val nvgPaint = NVGPaint.malloc()
   private val nvgColor = NVGColor.malloc()
@@ -76,14 +76,14 @@ object NVGRenderer {
   fun beginFrame(width: Float, height: Float) {
     if (drawing) throw IllegalStateException("[NVGRenderer] Already drawing, but called beginFrame")
 
-    val framebuffer = mc.framebuffer
-    val glFramebuffer = (framebuffer.colorAttachment as GlTexture).getOrCreateFramebuffer(
-      (RenderSystem.getDevice() as GlBackend).bufferManager,
+    val framebuffer = mc.mainRenderTarget
+    val glFramebuffer = (framebuffer.colorTexture as GlTexture).getFbo(
+      (RenderSystem.getDevice() as GlDevice).directStateAccess(),
       null
     )
 
     GlStateManager._glBindFramebuffer(GL30.GL_FRAMEBUFFER, glFramebuffer)
-    GlStateManager._viewport(0, 0, framebuffer.textureWidth, framebuffer.textureHeight)
+    GlStateManager._viewport(0, 0, framebuffer.width, framebuffer.height)
     GlStateManager._activeTexture(GL30.GL_TEXTURE0)
 
     nvgBeginFrame(vg, width, height, 1f)

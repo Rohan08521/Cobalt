@@ -1,7 +1,7 @@
 package org.cobalt.internal.ui
 
-import net.minecraft.client.input.CharInput
-import net.minecraft.client.input.KeyInput
+import net.minecraft.client.input.CharacterEvent
+import net.minecraft.client.input.KeyEvent
 
 internal abstract class UIComponent(
   var x: Float,
@@ -17,8 +17,8 @@ internal abstract class UIComponent(
   open fun mouseDragged(button: Int, offsetX: Double, offsetY: Double): Boolean = false
   open fun mouseScrolled(horizontalAmount: Double, verticalAmount: Double): Boolean = false
 
-  open fun charTyped(input: CharInput): Boolean = false
-  open fun keyPressed(input: KeyInput): Boolean = false
+  open fun charTyped(input: CharacterEvent): Boolean = false
+  open fun keyPressed(input: KeyEvent): Boolean = false
 
   fun updateBounds(x: Float, y: Float): UIComponent {
     this.x = x

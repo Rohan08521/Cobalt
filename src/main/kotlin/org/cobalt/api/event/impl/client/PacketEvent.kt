@@ -1,6 +1,6 @@
 package org.cobalt.api.event.impl.client
 
-import net.minecraft.network.packet.Packet
+import net.minecraft.network.protocol.Packet
 import org.cobalt.api.event.Event
 
 @Suppress("UNUSED_PARAMETER")

@@ -1,30 +1,30 @@
 package org.cobalt.api.util
 
-import net.minecraft.client.MinecraftClient
-import net.minecraft.screen.slot.SlotActionType
+import net.minecraft.client.Minecraft
+import net.minecraft.world.inventory.ClickType
 
 object InventoryUtils {
 
-  private val mc: MinecraftClient =
-    MinecraftClient.getInstance()
+  private val mc: Minecraft =
+    Minecraft.getInstance()
 
   private val player
     get() = mc.player
 
   private val interactionManager
-    get() = mc.interactionManager
+    get() = mc.gameMode
 
   @JvmStatic
   fun clickSlot(
     slot: Int,
-    click: ClickType = ClickType.LEFT,
-    action: SlotActionType = SlotActionType.PICKUP,
+    click: MouseClickType = MouseClickType.LEFT,
+    action: ClickType = ClickType.PICKUP,
   ) {
     val player = player ?: return
-    val handler = player.currentScreenHandler
+    val handler = player.containerMenu
 
-    interactionManager?.clickSlot(
-      handler.syncId,
+    interactionManager?.handleInventoryMouseClick(
+      handler.containerId,
       slot,
       click.ordinal,
       action,
@@ -44,11 +44,11 @@ object InventoryUtils {
     val inventory = player.inventory
 
     for (i in 0..8) {
-      val stack = inventory.getStack(i)
+      val stack = inventory.getItem(i)
       if (stack.isEmpty) continue
 
       val displayName =
-        stack.name.string
+        stack.hoverName.string
 
       if (displayName.contains(name, ignoreCase = true)) {
         return i
@@ -64,7 +64,7 @@ object InventoryUtils {
     val inventory = player.inventory
 
     for (i in 0..8) {
-      val stack = inventory.getStack(i)
+      val stack = inventory.getItem(i)
       if (stack.isEmpty) continue
 
       for (line in stack.getLoreLines()) {
@@ -82,11 +82,11 @@ object InventoryUtils {
     val player = player ?: return -1
     val inventory = player.inventory
 
-    for (i in 0 until inventory.size()) {
-      val stack = inventory.getStack(i)
+    for (i in 0 until inventory.containerSize) {
+      val stack = inventory.getItem(i)
       if (stack.isEmpty) continue
 
-      if (stack.name.string.contains(name, ignoreCase = true)) {
+      if (stack.hoverName.string.contains(name, ignoreCase = true)) {
         return i
       }
     }
@@ -99,8 +99,8 @@ object InventoryUtils {
     val player = player ?: return -1
     val inventory = player.inventory
 
-    for (i in 0 until inventory.size()) {
-      val stack = inventory.getStack(i)
+    for (i in 0 until inventory.containerSize) {
+      val stack = inventory.getItem(i)
       if (stack.isEmpty) continue
 
       for (line in stack.getLoreLines()) {
@@ -115,7 +115,7 @@ object InventoryUtils {
 
 }
 
-enum class ClickType {
+enum class MouseClickType {
   LEFT,
   RIGHT,
   MIDDLE

@@ -1,8 +1,8 @@
 package org.cobalt.internal.ui.screen
 
-import net.minecraft.client.gui.Click
-import net.minecraft.client.input.CharInput
-import net.minecraft.client.input.KeyInput
+import net.minecraft.client.input.CharacterEvent
+import net.minecraft.client.input.KeyEvent
+import net.minecraft.client.input.MouseButtonEvent
 import org.cobalt.api.event.EventBus
 import org.cobalt.api.event.annotation.SubscribeEvent
 import org.cobalt.api.event.impl.render.NvgEvent
@@ -30,12 +30,12 @@ internal object UIConfig : UIScreen() {
   @Suppress("unused")
   @SubscribeEvent
   fun onRender(event: NvgEvent) {
-    if (mc.currentScreen != this)
+    if (mc.screen != this)
       return
 
     val window = mc.window
-    val width = window.width.toFloat()
-    val height = window.height.toFloat()
+    val width = window.screenWidth.toFloat()
+    val height = window.screenHeight.toFloat()
 
     NVGRenderer.beginFrame(width, height)
 
@@ -64,28 +64,28 @@ internal object UIConfig : UIScreen() {
     NVGRenderer.endFrame()
   }
 
-  override fun mouseClicked(click: Click, doubled: Boolean): Boolean {
+  override fun mouseClicked(click: MouseButtonEvent, doubled: Boolean): Boolean {
     return body.mouseClicked(click.button()) ||
       sidebar.mouseClicked(click.button()) ||
       super.mouseClicked(click, doubled)
   }
 
-  override fun mouseReleased(click: Click): Boolean {
+  override fun mouseReleased(click: MouseButtonEvent): Boolean {
     return body.mouseReleased(click.button()) ||
       super.mouseReleased(click)
   }
 
-  override fun mouseDragged(click: Click, offsetX: Double, offsetY: Double): Boolean {
+  override fun mouseDragged(click: MouseButtonEvent, offsetX: Double, offsetY: Double): Boolean {
     return body.mouseDragged(click.button(), offsetX, offsetY) ||
       super.mouseDragged(click, offsetX, offsetY)
   }
 
-  override fun charTyped(input: CharInput): Boolean {
+  override fun charTyped(input: CharacterEvent): Boolean {
     return body.charTyped(input) ||
       super.charTyped(input)
   }
 
-  override fun keyPressed(input: KeyInput): Boolean {
+  override fun keyPressed(input: KeyEvent): Boolean {
     return body.keyPressed(input) ||
       super.keyPressed(input)
   }
@@ -109,10 +109,10 @@ internal object UIConfig : UIScreen() {
     super.init()
   }
 
-  override fun close() {
+  override fun onClose() {
     Config.saveModulesConfig()
     wasClosed = true
-    super.close()
+    super.onClose()
   }
 
   fun swapBodyPanel(panel: UIPanel) {

@@ -1,7 +1,7 @@
 package org.cobalt.internal.ui.panel.panels
 
 import java.awt.Color
-import net.minecraft.client.MinecraftClient
+import net.minecraft.client.Minecraft
 import org.cobalt.api.util.ui.NVGRenderer
 import org.cobalt.internal.ui.UIComponent
 import org.cobalt.internal.ui.components.tooltips.TooltipPosition
@@ -23,16 +23,16 @@ internal class UISidebar : UIPanel(
   }
 
   private val steveIcon = NVGRenderer.createImage("/assets/cobalt/steve.png")
-  private val userIcon = MinecraftClient.getInstance().session.uuidOrNull?.let {
+  private val userIcon = Minecraft.getInstance().user.profileId?.let {
     try {
-      NVGRenderer.createImage("https://mc-heads.net/avatar/${MinecraftClient.getInstance().session.uuidOrNull}/100/face.png")
+      NVGRenderer.createImage("https://mc-heads.net/avatar/${Minecraft.getInstance().user.profileId}/100/face.png")
     } catch (_: Exception) {
       steveIcon
     }
   } ?: steveIcon
 
   private val userIconTooltip = UITooltip(
-    content = { UITextTooltip("Hello, ${MinecraftClient.getInstance().session.username}!") },
+    content = { UITextTooltip("Hello, ${Minecraft.getInstance().user.name}!") },
     position = TooltipPosition.BELOW
   )
 

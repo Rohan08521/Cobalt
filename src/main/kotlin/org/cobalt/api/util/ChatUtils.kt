@@ -1,17 +1,17 @@
 package org.cobalt.api.util
 
 import kotlin.math.roundToInt
-import net.minecraft.client.MinecraftClient
-import net.minecraft.text.MutableText
-import net.minecraft.text.Style
-import net.minecraft.text.Text
-import net.minecraft.text.TextColor
-import net.minecraft.util.Formatting
+import net.minecraft.ChatFormatting
+import net.minecraft.client.Minecraft
+import net.minecraft.network.chat.Component
+import net.minecraft.network.chat.MutableComponent
+import net.minecraft.network.chat.Style
+import net.minecraft.network.chat.TextColor
 
 object ChatUtils {
 
-  private val mc: MinecraftClient =
-    MinecraftClient.getInstance()
+  private val mc: Minecraft =
+    Minecraft.getInstance()
 
   /**
    * Function to display a message in Minecraft chat with the prefix "[Cobalt Debug]"
@@ -20,9 +20,9 @@ object ChatUtils {
    */
   @JvmStatic
   fun sendDebug(message: String) {
-    mc.inGameHud.chatHud.addMessage(
-      Text.empty().append(debugPrefix)
-        .append(Text.literal("${Formatting.RESET}$message"))
+    mc.gui.chat.addMessage(
+      Component.empty().append(debugPrefix)
+        .append(Component.literal("${ChatFormatting.RESET}$message"))
     )
   }
 
@@ -33,9 +33,9 @@ object ChatUtils {
    */
   @JvmStatic
   fun sendMessage(message: String) {
-    mc.inGameHud.chatHud.addMessage(
-      Text.empty().append(prefix)
-        .append(Text.literal("${Formatting.RESET}$message"))
+    mc.gui.chat.addMessage(
+      Component.empty().append(prefix)
+        .append(Component.literal("${ChatFormatting.RESET}$message"))
     )
   }
 
@@ -49,12 +49,12 @@ object ChatUtils {
    * @return Text object with a gradient with the specified colors
    */
   @JvmStatic
-  fun buildGradient(text: String, startRgb: Int, endRgb: Int): MutableText {
-    val result = Text.empty()
+  fun buildGradient(text: String, startRgb: Int, endRgb: Int): MutableComponent {
+    val result = Component.empty()
     val length = text.length
 
     if (length <= 1) {
-      return Text.literal(text).setStyle(Style.EMPTY.withColor(TextColor.fromRgb(startRgb)))
+      return Component.literal(text).setStyle(Style.EMPTY.withColor(TextColor.fromRgb(startRgb)))
     }
 
     val sr = (startRgb shr 16) and 0xFF
@@ -74,7 +74,7 @@ object ChatUtils {
 
       val rgb = (r shl 16) or (g shl 8) or b
 
-      val charText = Text.literal(text[i].toString())
+      val charText = Component.literal(text[i].toString())
         .setStyle(Style.EMPTY.withColor(TextColor.fromRgb(rgb)))
 
       result.append(charText)
@@ -83,12 +83,12 @@ object ChatUtils {
     return result
   }
 
-  private val prefix = Text.literal("${Formatting.DARK_GRAY}[")
+  private val prefix = Component.literal("${ChatFormatting.DARK_GRAY}[")
     .append(buildGradient("Cobalt", 0x4CADD0, 0xB2F9FF))
-    .append(Text.literal("${Formatting.DARK_GRAY}] "))
+    .append(Component.literal("${ChatFormatting.DARK_GRAY}] "))
 
-  private val debugPrefix = Text.literal("${Formatting.DARK_GRAY}[")
+  private val debugPrefix = Component.literal("${ChatFormatting.DARK_GRAY}[")
     .append(buildGradient("Cobalt Debug", 0x369876, 0x71FF9E))
-    .append(Text.literal("${Formatting.DARK_GRAY}] "))
+    .append(Component.literal("${ChatFormatting.DARK_GRAY}] "))
 
 }

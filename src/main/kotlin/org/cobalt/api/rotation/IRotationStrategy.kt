@@ -1,6 +1,6 @@
 package org.cobalt.api.rotation
 
-import net.minecraft.client.network.ClientPlayerEntity
+import net.minecraft.client.player.LocalPlayer
 import org.cobalt.api.util.helper.Rotation
 
 interface IRotationStrategy {
@@ -14,7 +14,7 @@ interface IRotationStrategy {
    * @return Rotation with new yaw & new pitch or null if rotation is complete
    */
   fun onRotate(
-    player: ClientPlayerEntity,
+    player: LocalPlayer,
     targetYaw: Float,
     targetPitch: Float,
   ): Rotation?

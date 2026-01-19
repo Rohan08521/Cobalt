@@ -1,21 +1,22 @@
 package org.cobalt.api.util
 
 import kotlin.math.ceil
-import net.minecraft.client.MinecraftClient
-import net.minecraft.client.network.ClientPlayerEntity
-import net.minecraft.util.math.BlockPos
+import net.minecraft.client.Minecraft
+import net.minecraft.client.player.LocalPlayer
+import net.minecraft.core.BlockPos
+import net.minecraft.world.phys.Vec3
 import org.cobalt.api.util.helper.Rotation
 
 object PlayerUtils {
 
-  private val mc: MinecraftClient =
-    MinecraftClient.getInstance()
+  private val mc: Minecraft =
+    Minecraft.getInstance()
 
   /**
    * @return The player's current position
    */
   @JvmStatic
-  val position: BlockPos?
+  val position: Vec3?
     get() = mc.player?.position()
 
   /**
@@ -23,7 +24,7 @@ object PlayerUtils {
    */
   @JvmStatic
   val fov: Int
-    get() = mc.options.fov.value
+    get() = mc.options.fov().get()
 
 
   /**
@@ -32,15 +33,15 @@ object PlayerUtils {
   @JvmStatic
   val rotation: Rotation?
     get() = mc.player?.let {
-      Rotation(it.yaw, it.pitch)
+      Rotation(it.yRot, it.xRot)
     }
 
   /**
    * @return The current position of a ClientPlayerEntity
    */
   @JvmStatic
-  fun ClientPlayerEntity.position(): BlockPos {
-    return BlockPos.ofFloored(x, ceil(y - 0.25), z)
+  fun LocalPlayer.playerPos(): BlockPos {
+    return BlockPos.containing(x, ceil(y - 0.25), z)
   }
 
 }

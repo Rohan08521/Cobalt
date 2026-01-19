@@ -1,6 +1,6 @@
 package org.cobalt.api.rotation.strategy
 
-import net.minecraft.client.network.ClientPlayerEntity
+import net.minecraft.client.player.LocalPlayer
 import org.cobalt.api.rotation.EasingType
 import org.cobalt.api.rotation.IRotationStrategy
 import org.cobalt.api.util.AngleUtils
@@ -25,7 +25,7 @@ class TimedEaseStrategy(
   }
 
   override fun onRotate(
-    player: ClientPlayerEntity,
+    player: LocalPlayer,
     targetYaw: Float,
     targetPitch: Float,
   ): Rotation? {

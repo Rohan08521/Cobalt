@@ -1,8 +1,8 @@
 package org.cobalt.internal.ui.components.settings
 
+import com.mojang.blaze3d.platform.InputConstants
 import java.awt.Color
-import net.minecraft.client.input.KeyInput
-import net.minecraft.client.util.InputUtil
+import net.minecraft.client.input.KeyEvent
 import org.cobalt.api.module.setting.impl.KeyBindSetting
 import org.cobalt.api.util.ui.NVGRenderer
 import org.cobalt.internal.ui.UIComponent
@@ -82,12 +82,12 @@ internal class UIKeyBindSetting(private val setting: KeyBindSetting) : UICompone
     return false
   }
 
-  override fun keyPressed(input: KeyInput): Boolean {
+  override fun keyPressed(input: KeyEvent): Boolean {
     if (!isListening) {
       return false
     }
 
-    val keyCode = InputUtil.fromKeyCode(input).code
+    val keyCode = InputConstants.getKey(input).value
 
     setting.value.keyCode = when (keyCode) {
       GLFW.GLFW_KEY_ESCAPE, GLFW.GLFW_KEY_BACKSPACE -> -1

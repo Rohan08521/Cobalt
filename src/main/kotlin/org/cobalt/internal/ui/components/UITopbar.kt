@@ -1,8 +1,8 @@
 package org.cobalt.internal.ui.components
 
 import java.awt.Color
-import net.minecraft.client.input.CharInput
-import net.minecraft.client.input.KeyInput
+import net.minecraft.client.input.CharacterEvent
+import net.minecraft.client.input.KeyEvent
 import org.cobalt.api.util.ui.NVGRenderer
 import org.cobalt.internal.ui.UIComponent
 
@@ -46,11 +46,11 @@ internal class UITopbar(
     return searchBar.mouseDragged(button, offsetX, offsetY)
   }
 
-  override fun charTyped(input: CharInput): Boolean {
+  override fun charTyped(input: CharacterEvent): Boolean {
     return searchBar.charTyped(input)
   }
 
-  override fun keyPressed(input: KeyInput): Boolean {
+  override fun keyPressed(input: KeyEvent): Boolean {
     return searchBar.keyPressed(input)
   }
 

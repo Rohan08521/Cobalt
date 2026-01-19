@@ -1,7 +1,7 @@
 package org.cobalt.api.util.helper
 
-import net.minecraft.client.MinecraftClient
-import net.minecraft.client.util.InputUtil
+import com.mojang.blaze3d.platform.InputConstants
+import net.minecraft.client.Minecraft
 
 class KeyBind(
   var keyCode: Int = -1,
@@ -11,10 +11,10 @@ class KeyBind(
 
   fun isPressed(): Boolean {
     if (keyCode == -1) return false
-    val mc = MinecraftClient.getInstance()
+    val mc = Minecraft.getInstance()
 
-    val isPressed = mc.currentScreen == null
-      && InputUtil.isKeyPressed(mc.window, keyCode)
+    val isPressed = mc.screen == null
+      && InputConstants.isKeyDown(mc.window, keyCode)
 
     return (isPressed && !wasPressed).also {
       wasPressed = isPressed

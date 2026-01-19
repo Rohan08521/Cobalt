@@ -1,7 +1,7 @@
 package org.cobalt.api.rotation
 
 import kotlin.math.roundToInt
-import net.minecraft.client.MinecraftClient
+import net.minecraft.client.Minecraft
 import org.cobalt.api.event.annotation.SubscribeEvent
 import org.cobalt.api.event.impl.render.WorldRenderEvent
 import org.cobalt.api.util.AngleUtils
@@ -9,8 +9,8 @@ import org.cobalt.api.util.helper.Rotation
 
 object RotationExecutor {
 
-  private val mc: MinecraftClient =
-    MinecraftClient.getInstance()
+  private val mc: Minecraft =
+    Minecraft.getInstance()
 
   private var targetYaw: Float = 0F
   private var targetPitch: Float = 0F
@@ -62,8 +62,8 @@ object RotationExecutor {
       if (result == null) {
         stopRotating()
       } else {
-        player.yaw = AngleUtils.normalizeAngle(applyGCD(result.yaw, player.yaw))
-        player.pitch = applyGCD(result.pitch, player.pitch, -90f, 90f).coerceIn(-90f, 90f)
+        player.setYRot(AngleUtils.normalizeAngle(applyGCD(result.yaw, player.yRot)))
+        player.setXRot(applyGCD(result.pitch, player.xRot, -90f, 90f).coerceIn(-90f, 90f))
       }
     }
   }
@@ -78,7 +78,7 @@ object RotationExecutor {
    * @return The adjusted rotation value.
    */
   private fun applyGCD(rotation: Float, prevRotation: Float, min: Float? = null, max: Float? = null): Float {
-    val sensitivity = mc.options.mouseSensitivity.value
+    val sensitivity = mc.options.sensitivity().get()
     val f = sensitivity * 0.6 + 0.2
     val gcd = f * f * f * 1.2
 

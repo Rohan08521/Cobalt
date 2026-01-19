@@ -1,7 +1,7 @@
 package org.cobalt.internal.ui.panel
 
-import net.minecraft.client.input.CharInput
-import net.minecraft.client.input.KeyInput
+import net.minecraft.client.input.CharacterEvent
+import net.minecraft.client.input.KeyEvent
 import org.cobalt.internal.ui.UIComponent
 
 internal abstract class UIPanel(
@@ -22,10 +22,10 @@ internal abstract class UIPanel(
   override fun mouseDragged(button: Int, offsetX: Double, offsetY: Double) =
     components.any { it.mouseDragged(button, offsetX, offsetY) }
 
-  override fun charTyped(input: CharInput) =
+  override fun charTyped(input: CharacterEvent) =
     components.any { it.charTyped(input) }
 
-  override fun keyPressed(input: KeyInput) =
+  override fun keyPressed(input: KeyEvent) =
     components.any { it.keyPressed(input) }
 
 }

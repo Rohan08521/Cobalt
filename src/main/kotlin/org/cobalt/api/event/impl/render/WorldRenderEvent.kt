@@ -1,9 +1,9 @@
 package org.cobalt.api.event.impl.render
 
-import net.minecraft.client.render.Camera
-import net.minecraft.client.render.Frustum
-import net.minecraft.client.render.VertexConsumerProvider
-import net.minecraft.client.util.math.MatrixStack
+import com.mojang.blaze3d.vertex.PoseStack
+import net.minecraft.client.Camera
+import net.minecraft.client.renderer.MultiBufferSource
+import net.minecraft.client.renderer.culling.Frustum
 import org.cobalt.api.event.Event
 
 @Suppress("UNUSED_PARAMETER")
@@ -13,8 +13,8 @@ abstract class WorldRenderEvent(val context: WorldRenderContext) : Event() {
 }
 
 class WorldRenderContext {
-  var matrixStack: MatrixStack? = null
-  lateinit var consumers: VertexConsumerProvider
+  var matrixStack: PoseStack? = null
+  lateinit var consumers: MultiBufferSource
   lateinit var camera: Camera
   lateinit var frustum: Frustum
 }

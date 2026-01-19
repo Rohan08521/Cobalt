@@ -1,12 +1,12 @@
 package org.cobalt.api.util
 
-import net.minecraft.client.MinecraftClient
-import org.cobalt.mixin.client.MouseClickAccessor_MinecraftClientMixin
+import net.minecraft.client.Minecraft
+import org.cobalt.mixin.client.MouseClickAccessor_MinecraftMixin
 
 object MouseUtils {
 
-  private val mc: MinecraftClient =
-    MinecraftClient.getInstance()
+  private val mc: Minecraft =
+    Minecraft.getInstance()
 
   private var isMouseUngrabbed: Boolean = false
 
@@ -27,12 +27,12 @@ object MouseUtils {
 
   @JvmStatic
   fun leftClick() {
-    (mc as MouseClickAccessor_MinecraftClientMixin).leftClick()
+    (mc as MouseClickAccessor_MinecraftMixin).leftClick()
   }
 
   @JvmStatic
   fun rightClick() {
-    (mc as MouseClickAccessor_MinecraftClientMixin).rightClick()
+    (mc as MouseClickAccessor_MinecraftMixin).rightClick()
   }
 
 }

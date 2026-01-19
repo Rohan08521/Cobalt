@@ -1,6 +1,6 @@
 package org.cobalt.api.notification
 
-import net.minecraft.client.MinecraftClient
+import net.minecraft.client.Minecraft
 import org.cobalt.api.event.annotation.SubscribeEvent
 import org.cobalt.api.event.impl.render.NvgEvent
 import org.cobalt.api.util.ui.NVGRenderer
@@ -8,8 +8,8 @@ import org.cobalt.internal.ui.notification.UINotification
 
 object NotificationManager : NotificationAPI {
 
-  private val mc: MinecraftClient =
-    MinecraftClient.getInstance()
+  private val mc: Minecraft =
+    Minecraft.getInstance()
 
   private val notifications = mutableListOf<UINotification>()
   private const val MAX_NOTIFICATIONS = 5
@@ -27,8 +27,8 @@ object NotificationManager : NotificationAPI {
   @SubscribeEvent
   fun onRender(event: NvgEvent) {
     val window = mc.window
-    val screenWidth = window.width.toFloat()
-    val screenHeight = window.height.toFloat()
+    val screenWidth = window.screenWidth.toFloat()
+    val screenHeight = window.screenHeight.toFloat()
 
     try {
       NVGRenderer.beginFrame(screenWidth, screenHeight)
