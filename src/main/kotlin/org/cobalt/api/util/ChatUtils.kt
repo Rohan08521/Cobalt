@@ -13,6 +13,9 @@ object ChatUtils {
   private val mc: Minecraft =
     Minecraft.getInstance()
 
+  // used for sendDebug to prevent resending same message multiple times in a row
+  private var lastMessage: String = ""
+
   /**
    * Function to display a message in Minecraft chat with the prefix "[Cobalt Debug]"
    *
@@ -21,11 +24,14 @@ object ChatUtils {
   @JvmStatic
   fun sendDebug(message: String) {
     if (mc.player == null || mc.level == null) return
+    if (message == lastMessage) return
 
     mc.gui.chat.addMessage(
       Component.empty().append(debugPrefix)
         .append(Component.literal("${ChatFormatting.RESET}$message"))
     )
+
+    lastMessage = message
   }
 
   /**
